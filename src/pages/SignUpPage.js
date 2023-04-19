@@ -15,7 +15,6 @@ export default function SignUpPage() {
   });
 
   function handleSubmit(e) {
-    console.log(process.env.REACT_APP_API_URL);
     e.preventDefault();
     if (form.password !== form.repeat_password) {
       return alert("Os campos 'Senha' e 'Confirme a senha' devem ser iguais!");
