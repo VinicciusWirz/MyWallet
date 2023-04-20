@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
+import { ThreeDots } from "react-loader-spinner";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import SessionContext from "../contexts/SessionContext";
@@ -17,6 +18,7 @@ export default function TransactionsPage() {
         ? "deposit"
         : params.tipo === "saida" && "withdraw",
   });
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const storedToken = localStorage.getItem("session");
@@ -40,12 +42,15 @@ export default function TransactionsPage() {
         Authorization: `Bearer ${session.token}`,
       },
     };
+    setLoading(true);
     axios
       .post(`${url}/transactions`, body, config)
       .then(() => {
+        setLoading(false);
         navigate("/home");
       })
       .catch((err) => {
+        setLoading(false);
         alert(`Erro ${err.response.status}: ${err.response.data}`);
       });
   }
@@ -60,6 +65,7 @@ export default function TransactionsPage() {
           required
           value={form.value}
           onChange={(e) => setForm({ ...form, value: e.target.value })}
+          disabled={loading}
           data-test="registry-amount-input"
         />
         <input
@@ -68,10 +74,15 @@ export default function TransactionsPage() {
           required
           value={form.description}
           onChange={(e) => setForm({ ...form, description: e.target.value })}
+          disabled={loading}
           data-test="registry-name-input"
         />
-        <button type="submit" data-test="registry-save">
-          Salvar {params.tipo}
+        <button type="submit" data-test="registry-save" disabled={loading}>
+          {loading ? (
+            <ThreeDots height="24" width="70" color="#DBDBDB" />
+          ) : (
+            `Salvar ${params.tipo}`
+          )}
         </button>
       </form>
     </TransactionsContainer>
@@ -88,5 +99,13 @@ const TransactionsContainer = styled.main`
   h1 {
     align-self: flex-start;
     margin-bottom: 40px;
+  }
+  button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  input:disabled {
+    background: #dadada;
   }
 `;

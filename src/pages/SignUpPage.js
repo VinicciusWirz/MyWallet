@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
+import { ThreeDots } from "react-loader-spinner";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import MyWalletLogo from "../components/MyWalletLogo";
@@ -13,19 +14,23 @@ export default function SignUpPage() {
     password: "",
     repeat_password: "",
   });
+  const [loading, setLoading] = useState(false);
 
   function handleSubmit(e) {
     e.preventDefault();
     if (form.password !== form.repeat_password) {
       return alert("Os campos 'Senha' e 'Confirme a senha' devem ser iguais!");
     }
+    setLoading(true);
     axios
       .post(`${url}/sign-up`, form)
       .then(() => {
+        setLoading(false);
         navigate("/");
       })
       .catch((err) => {
         alert(`Erro ${err.response.status}: ${err.response.data}`);
+        setLoading(false);
       });
   }
 
@@ -36,17 +41,21 @@ export default function SignUpPage() {
         <input
           placeholder="Nome"
           type="text"
+          autoComplete="given-name"
           required
           value={form.name}
           onChange={(e) => setForm({ ...form, name: e.target.value })}
+          disabled={loading}
           data-test="name"
         />
         <input
           placeholder="E-mail"
           type="email"
+          autoComplete="email"
           required
           value={form.email}
           onChange={(e) => setForm({ ...form, email: e.target.value })}
+          disabled={loading}
           data-test="email"
         />
         <input
@@ -56,6 +65,7 @@ export default function SignUpPage() {
           required
           minLength={3}
           value={form.password}
+          disabled={loading}
           onChange={(e) => setForm({ ...form, password: e.target.value })}
           data-test="password"
         />
@@ -66,13 +76,18 @@ export default function SignUpPage() {
           required
           minLength={3}
           value={form.repeat_password}
+          disabled={loading}
           onChange={(e) =>
             setForm({ ...form, repeat_password: e.target.value })
           }
           data-test="conf-password"
         />
-        <button type="submit" data-test="sign-up-submit">
-          Cadastrar
+        <button type="submit" data-test="sign-up-submit" disabled={loading}>
+          {loading ? (
+            <ThreeDots height="24" width="70" color="#DBDBDB" />
+          ) : (
+            "Cadastrar"
+          )}
         </button>
       </form>
 
@@ -95,5 +110,13 @@ const SingUpContainer = styled.section`
     -webkit-text-decoration: none;
     text-decoration: none;
     padding-top: 30px;
+  }
+  button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  input:disabled {
+    background: #dadada;
   }
 `;
