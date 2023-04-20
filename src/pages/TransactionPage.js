@@ -36,7 +36,6 @@ export default function TransactionsPage() {
       value: (Number(parseFloat(form.value).toFixed(2)) * 100).toString(),
     };
 
-    console.log(body);
     const config = {
       headers: {
         Authorization: `Bearer ${session.token}`,
