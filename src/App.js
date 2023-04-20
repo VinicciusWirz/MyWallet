@@ -1,17 +1,17 @@
 import { useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import styled from "styled-components";
-import TokenContext from "./contexts/TokenContext";
+import SessionContext from "./contexts/SessionContext";
 import HomePage from "./pages/HomePage";
 import SignInPage from "./pages/SignInPage";
 import SignUpPage from "./pages/SignUpPage";
 import TransactionsPage from "./pages/TransactionPage";
 
 export default function App() {
-  const [token, setToken] = useState({ token: "" });
+  const [session, setSession] = useState({ name: "", token: "" });
   return (
     <PagesContainer>
-      <TokenContext.Provider value={{ token, setToken }}>
+      <SessionContext.Provider value={{ session, setSession }}>
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<SignInPage />} />
@@ -23,7 +23,7 @@ export default function App() {
             />
           </Routes>
         </BrowserRouter>
-      </TokenContext.Provider>
+      </SessionContext.Provider>
     </PagesContainer>
   );
 }

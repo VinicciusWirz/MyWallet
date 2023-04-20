@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import MyWalletLogo from "../components/MyWalletLogo";
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
-import TokenContext from "../contexts/TokenContext";
+import SessionContext from "../contexts/SessionContext";
 
 export default function SignInPage() {
   const url = process.env.REACT_APP_API_URL;
@@ -12,13 +12,13 @@ export default function SignInPage() {
     email: "",
     password: "",
   });
-  const { setToken } = useContext(TokenContext);
+  const { setSession } = useContext(SessionContext);
 
   useEffect(() => {
-    const storedToken = localStorage.getItem("sessionToken");
+    const storedToken = localStorage.getItem("session");
     if (storedToken) {
       const token = JSON.parse(storedToken);
-      setToken(token);
+      setSession(token);
       navigate("/home");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -29,9 +29,9 @@ export default function SignInPage() {
     axios
       .post(`${url}/sign-in`, form)
       .then((res) => {
-        const token = res.data;
-        setToken(token);
-        localStorage.setItem("sessionToken", JSON.stringify(token));
+        const user = res.data;
+        setSession(user);
+        localStorage.setItem("session", JSON.stringify(user));
         navigate("/home");
       })
       .catch((err) => {
