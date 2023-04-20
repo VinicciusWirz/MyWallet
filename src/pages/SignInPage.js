@@ -48,6 +48,7 @@ export default function SignInPage() {
           required
           value={form.email}
           onChange={(e) => setForm({ ...form, email: e.target.value })}
+          data-test="email"
         />
         <input
           placeholder="Senha"
@@ -57,8 +58,11 @@ export default function SignInPage() {
           minLength={3}
           value={form.password}
           onChange={(e) => setForm({ ...form, password: e.target.value })}
+          data-test="password"
         />
-        <button type="submit">Entrar</button>
+        <button type="submit" data-test="sign-in-submit">
+          Entrar
+        </button>
       </form>
 
       <Link to="/cadastro">Primeira vez? Cadastre-se!</Link>

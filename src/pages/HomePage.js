@@ -65,9 +65,12 @@ export default function HomePage() {
             <ListItemContainer key={index}>
               <div>
                 <span>{t.date.slice(0, 5)}</span>
-                <strong>{t.description}</strong>
+                <strong data-test="registry-name">{t.description}</strong>
               </div>
-              <Value color={t.type === "withdraw" ? "negativo" : "positivo"}>
+              <Value
+                color={t.type === "withdraw" ? "negativo" : "positivo"}
+                data-test="registry-amount"
+              >
                 {(t.value / 100).toLocaleString("pt-BR", {
                   style: "decimal",
                   minimumFractionDigits: 2,
@@ -80,7 +83,7 @@ export default function HomePage() {
 
         <article>
           <strong>Saldo</strong>
-          <Value color={total.order}>
+          <Value color={total.order} data-test="total-amount">
             {(Number(total.value) / 100).toLocaleString("pt-BR", {
               style: "decimal",
               minimumFractionDigits: 2,
@@ -91,13 +94,19 @@ export default function HomePage() {
       </TransactionsContainer>
 
       <ButtonsContainer>
-        <button onClick={() => navigate("/nova-transacao/entrada")}>
+        <button
+          onClick={() => navigate("/nova-transacao/entrada")}
+          data-test="new-income"
+        >
           <AiOutlinePlusCircle />
           <p>
             Nova <br /> entrada
           </p>
         </button>
-        <button onClick={() => navigate("/nova-transacao/saida")}>
+        <button
+          onClick={() => navigate("/nova-transacao/saida")}
+          data-test="new-expense"
+        >
           <AiOutlineMinusCircle />
           <p>
             Nova <br />
