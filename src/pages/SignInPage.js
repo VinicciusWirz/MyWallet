@@ -76,4 +76,13 @@ const SingInContainer = styled.section`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  a {
+    font-weight: 700;
+    font-size: 15px;
+    line-height: 18px;
+    color: white;
+    -webkit-text-decoration: none;
+    text-decoration: none;
+    padding-top: 30px;
+  }
 `;
