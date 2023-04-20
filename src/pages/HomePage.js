@@ -17,41 +17,73 @@ export default function HomePage() {
     if (storedToken) {
       const tokenObj = JSON.parse(storedToken);
       setSession(tokenObj);
-      const config = {
-        headers: {
-          Authorization: `Bearer ${tokenObj.token}`,
-        },
-      };
-      axios
-        .get(`${url}/transactions`, config)
-        .then((res) => {
-          setTransactions(res.data.transactions);
-          let sum = 0;
-          res.data.transactions.forEach((t) => {
-            if (t.type === "withdraw") {
-              sum -= Number(t.value);
-            }
-            if (t.type === "deposit") {
-              sum += Number(t.value);
-            }
-          });
-          if (sum < 0) {
-            setTotal({ value: -sum, order: "negativo" });
-          } else {
-            setTotal({ value: sum, order: "positivo" });
-          }
-        })
-        .catch((err) => console.log(err));
+      updateTransactions(tokenObj);
     } else {
       navigate("/");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  function updateTransactions(token) {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${session.token ? session.token : token.token}`,
+      },
+    };
+    axios
+      .get(`${url}/transactions`, config)
+      .then((res) => {
+        setTransactions(res.data.transactions);
+        let sum = 0;
+        res.data.transactions.forEach((t) => {
+          if (t.type === "withdraw") {
+            sum -= Number(t.value);
+          }
+          if (t.type === "deposit") {
+            sum += Number(t.value);
+          }
+        });
+        if (sum < 0) {
+          setTotal({ value: -sum, order: "negativo" });
+        } else {
+          setTotal({ value: sum, order: "positivo" });
+        }
+      })
+      .catch((err) => {
+        console.log("esse erro");
+        alert(`Erro ${err.response.status}: ${err.response.data}`);
+      });
+  }
+
   function logout() {
     localStorage.clear();
     window.location.reload();
   }
+
+  function deleteTransaction(id, desc) {
+    console.log("id", id);
+    const question = `Tem certeza que quer deletar essa transação? Titulo: ${desc}`;
+
+    console.log("token", session.token);
+    if (window.confirm(question)) {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${session.token}`,
+        },
+      };
+      console.log(id, config);
+      axios
+        .delete(`${url}/transactions/${id}`, config)
+        .then(() => {
+          updateTransactions();
+        })
+        .catch((err) => {
+          console.log(err);
+          alert(`Erro ${err.response.status}: ${err.response.data}`);
+        });
+    }
+  }
+
   return (
     <HomeContainer>
       <Header>
@@ -61,22 +93,27 @@ export default function HomePage() {
 
       <TransactionsContainer>
         <ul>
-          {transactions.map((t, index) => (
-            <ListItemContainer key={index}>
+          {transactions.map((t) => (
+            <ListItemContainer key={t.id}>
               <div>
                 <span>{t.date.slice(0, 5)}</span>
                 <strong data-test="registry-name">{t.description}</strong>
               </div>
-              <Value
-                color={t.type === "withdraw" ? "negativo" : "positivo"}
-                data-test="registry-amount"
-              >
-                {(t.value / 100).toLocaleString("pt-BR", {
-                  style: "decimal",
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                })}
-              </Value>
+              <div>
+                <Value
+                  color={t.type === "withdraw" ? "negativo" : "positivo"}
+                  data-test="registry-amount"
+                >
+                  {(t.value / 100).toLocaleString("pt-BR", {
+                    style: "decimal",
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}
+                </Value>
+                <button onClick={() => deleteTransaction(t.id, t.description)}>
+                  x
+                </button>
+              </div>
             </ListItemContainer>
           ))}
         </ul>
@@ -190,5 +227,16 @@ const ListItemContainer = styled.li`
   div span {
     color: #c6c6c6;
     margin-right: 10px;
+  }
+  div:nth-child(2) {
+    display: flex;
+    align-items: center;
+    button {
+      font-size: 16px;
+      padding: 0px;
+      margin-left: 11px;
+      color: #c6c6c6;
+      background: none;
+    }
   }
 `;
