@@ -69,7 +69,11 @@ export default function SignInPage() {
           data-test="password"
         />
         <button type="submit" data-test="sign-in-submit" disabled={loading}>
-          {loading ? <ThreeDots height="24" width="70" color="#DBDBDB" /> : "Entrar"}
+          {loading ? (
+            <ThreeDots height="24" width="70" color="#DBDBDB" />
+          ) : (
+            "Entrar"
+          )}
         </button>
       </form>
 
@@ -89,16 +93,15 @@ const SingInContainer = styled.section`
     font-size: 15px;
     line-height: 18px;
     color: white;
-    -webkit-text-decoration: none;
     text-decoration: none;
     padding-top: 30px;
   }
-  button{
+  button {
     display: flex;
     justify-content: center;
     align-items: center;
   }
-  input:disabled{
-    background: #dadada
+  input:disabled {
+    background: #dadada;
   }
 `;

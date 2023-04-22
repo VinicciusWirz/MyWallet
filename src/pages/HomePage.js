@@ -4,7 +4,7 @@ import { BiExit } from "react-icons/bi";
 import styled from "styled-components";
 import SessionContext from "../contexts/SessionContext";
 import { useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { TailSpin } from "react-loader-spinner";
 
 export default function HomePage() {
@@ -115,7 +115,15 @@ export default function HomePage() {
               <ListItemContainer key={t.id}>
                 <div>
                   <span>{t.date.slice(0, 5)}</span>
-                  <strong data-test="registry-name">{t.description}</strong>
+                  <Link
+                    to={`/editar-registro/${
+                      t.type === "withdraw"
+                        ? "saida"
+                        : t.type === "deposit" && "entrada"
+                    }?id=${t.id}`}
+                  >
+                    <strong data-test="registry-name">{t.description}</strong>
+                  </Link>
                 </div>
                 <div>
                   <Value
@@ -220,6 +228,10 @@ const TransactionsContainer = styled.article`
       font-weight: 700;
       text-transform: uppercase;
     }
+  }
+  a{
+    text-decoration:none;
+    color: inherit;
   }
 `;
 const ButtonsContainer = styled.section`

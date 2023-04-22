@@ -107,7 +107,6 @@ const SingUpContainer = styled.section`
     font-size: 15px;
     line-height: 18px;
     color: white;
-    -webkit-text-decoration: none;
     text-decoration: none;
     padding-top: 30px;
   }

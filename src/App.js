@@ -2,6 +2,7 @@ import { useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import styled from "styled-components";
 import SessionContext from "./contexts/SessionContext";
+import EditPage from "./pages/EditPage";
 import HomePage from "./pages/HomePage";
 import SignInPage from "./pages/SignInPage";
 import SignUpPage from "./pages/SignUpPage";
@@ -21,6 +22,7 @@ export default function App() {
               path="/nova-transacao/:tipo"
               element={<TransactionsPage />}
             />
+            <Route path="/editar-registro/:tipo" element={<EditPage />} />
           </Routes>
         </BrowserRouter>
       </SessionContext.Provider>
