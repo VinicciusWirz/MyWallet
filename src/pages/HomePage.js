@@ -37,7 +37,7 @@ export default function HomePage() {
       .get(`${url}/transactions`, config)
       .then((res) => {
         setLoading(false);
-        setTransactions(res.data.transactions);
+        setTransactions(res.data.transactions.reverse());
         let sum = 0;
         res.data.transactions.forEach((t) => {
           if (t.type === "withdraw") {
