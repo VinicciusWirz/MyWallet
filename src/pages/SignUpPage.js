@@ -129,6 +129,9 @@ const SingUpContainer = styled.section`
     background: #dadada;
   }
   button {
+    display: flex;
+    align-items:center;
+    justify-content: center;
     outline: none;
     border: none;
     border-radius: 5px;

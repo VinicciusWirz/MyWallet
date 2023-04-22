@@ -1,6 +1,7 @@
 import axios from "axios";
-import { useContext, useEffect, useState } from "react";
+import dayjs from "dayjs";
 import { ThreeDots } from "react-loader-spinner";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import SessionContext from "../contexts/SessionContext";
@@ -33,9 +34,11 @@ export default function TransactionsPage() {
 
   function handleSubmit(e) {
     e.preventDefault();
+    const date = dayjs().format("DD/MM/YYYY");
     const body = {
       ...form,
       value: (Number(parseFloat(form.value).toFixed(2)) * 100).toString(),
+      date,
     };
 
     const config = {
@@ -120,15 +123,15 @@ const TransactionsContainer = styled.main`
     justify-content: center;
     align-items: center;
     outline: none;
-        border: none;
-        border-radius: 5px;
-        background-color: #a328d6;
-        font-size: 20px;
-        font-weight: 600;
-        color: #fff;
-        cursor: pointer;
-        width: 100%;
-        padding: 12px;
+    border: none;
+    border-radius: 5px;
+    background-color: #a328d6;
+    font-size: 20px;
+    font-weight: 600;
+    color: #fff;
+    cursor: pointer;
+    width: 100%;
+    padding: 12px;
   }
   input {
     font-size: 20px;
