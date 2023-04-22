@@ -111,39 +111,45 @@ export default function HomePage() {
 
         <TransactionsContainer>
           <ul>
-            {transactions.map((t) => (
-              <ListItemContainer key={t.id}>
-                <div>
-                  <span>{t.date.slice(0, 5)}</span>
-                  <Link
-                    to={`/editar-registro/${
-                      t.type === "withdraw"
-                        ? "saida"
-                        : t.type === "deposit" && "entrada"
-                    }?id=${t.id}`}
-                  >
-                    <strong data-test="registry-name">{t.description}</strong>
-                  </Link>
-                </div>
-                <div>
-                  <Value
-                    color={t.type === "withdraw" ? "negativo" : "positivo"}
-                    data-test="registry-amount"
-                  >
-                    {(t.value / 100).toLocaleString("pt-BR", {
-                      style: "decimal",
-                      minimumFractionDigits: 2,
-                      maximumFractionDigits: 2,
-                    })}
-                  </Value>
-                  <button
-                    onClick={() => deleteTransaction(t.id, t.description)}
-                  >
-                    x
-                  </button>
-                </div>
-              </ListItemContainer>
-            ))}
+            {transactions.length === 0 ? (
+              <NoListMsg>
+                <p>Não há registros de entrada ou saída</p>
+              </NoListMsg>
+            ) : (
+              transactions.map((t) => (
+                <ListItemContainer key={t.id}>
+                  <ItemDescription>
+                    <span>{t.date.slice(0, 5)}</span>
+                    <Link
+                      to={`/editar-registro/${
+                        t.type === "withdraw"
+                          ? "saida"
+                          : t.type === "deposit" && "entrada"
+                      }?id=${t.id}`}
+                    >
+                      <strong data-test="registry-name">{t.description}</strong>
+                    </Link>
+                  </ItemDescription>
+                  <div>
+                    <Value
+                      color={t.type === "withdraw" ? "negativo" : "positivo"}
+                      data-test="registry-amount"
+                    >
+                      {(t.value / 100).toLocaleString("pt-BR", {
+                        style: "decimal",
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      })}
+                    </Value>
+                    <button
+                      onClick={() => deleteTransaction(t.id, t.description)}
+                    >
+                      x
+                    </button>
+                  </div>
+                </ListItemContainer>
+              ))
+            )}
           </ul>
 
           <article>
@@ -189,8 +195,9 @@ export default function HomePage() {
 const HomeContainer = styled.div`
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 50px);
-  max-height: calc(100vh - 50px);
+  height: 100%;
+  max-height: 100%;
+  width: 100%;
 `;
 const Header = styled.header`
   display: flex;
@@ -199,19 +206,24 @@ const Header = styled.header`
   padding: 0 2px 5px 2px;
   margin-bottom: 15px;
   font-size: 26px;
+  font-weight: 400;
+  font-family: "Raleway", sans-serif;
   color: white;
 `;
 const TransactionsContainer = styled.article`
   flex-grow: 1;
   background-color: #fff;
+  height: calc(100% - 170px);
   color: #000;
   border-radius: 5px;
   padding: 16px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  max-height: 73%;
   ul {
+    height: 100%;
+    max-height: 100%;
+    margin-bottom: 13px;
     overflow-y: scroll;
     padding-bottom: 10px;
     ::-webkit-scrollbar {
@@ -220,6 +232,8 @@ const TransactionsContainer = styled.article`
     ::-webkit-scrollbar-thumb {
       background-color: #ccc;
     }
+    display: flex;
+    flex-direction: column;
   }
   article {
     display: flex;
@@ -229,8 +243,8 @@ const TransactionsContainer = styled.article`
       text-transform: uppercase;
     }
   }
-  a{
-    text-decoration:none;
+  a {
+    text-decoration: none;
     color: inherit;
   }
 `;
@@ -243,11 +257,19 @@ const ButtonsContainer = styled.section`
   button {
     width: 50%;
     height: 115px;
-    font-size: 22px;
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    background-color: #a328d6;
     text-align: left;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    font-size: 22px;
+    font-weight: 600;
+    color: #fff;
+    cursor: pointer;
+    padding: 12px;
     p {
       font-size: 18px;
     }
@@ -265,6 +287,7 @@ const ListItemContainer = styled.li`
   margin-bottom: 8px;
   color: #000000;
   margin-right: 10px;
+  line-height: 20px;
   div span {
     color: #c6c6c6;
     margin-right: 10px;
@@ -278,7 +301,19 @@ const ListItemContainer = styled.li`
       margin-left: 11px;
       color: #c6c6c6;
       background: none;
+      outline: none;
+      border: none;
     }
+  }
+`;
+const ItemDescription = styled.div`
+  max-width: auto;
+  margin-right: 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  span {
+    color: #c6c6c6;
+    margin-right: 10px;
   }
 `;
 const LoadingModal = styled.div`
@@ -292,4 +327,20 @@ const LoadingModal = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+`;
+const NoListMsg = styled.div`
+  align-self: center;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  width: 55%;
+  p {
+    font-family: "Raleway", sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 23px;
+    text-align: center;
+    color: #868686;
+  }
 `;

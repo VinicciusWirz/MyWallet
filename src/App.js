@@ -32,7 +32,11 @@ export default function App() {
 
 const PagesContainer = styled.main`
   background-color: #8c11be;
-  width: calc(100vw - 50px);
-  max-height: 100vh;
+  width: 100vw;
   padding: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  max-height: 100vh;
 `;

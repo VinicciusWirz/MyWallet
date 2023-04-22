@@ -91,20 +91,63 @@ export default function TransactionsPage() {
 }
 
 const TransactionsContainer = styled.main`
-  height: calc(100vh - 50px);
+  height: 100%;
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-
+  form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    width: 100%;
+    border-radius: 5px;
+  }
   h1 {
+    font-family: "Raleway", sans-serif;
+    font-weight: 700;
+    font-size: 26px;
+    color: white;
     align-self: flex-start;
     margin-bottom: 40px;
+    line-height: 31px;
   }
   button {
     display: flex;
     justify-content: center;
     align-items: center;
+    outline: none;
+        border: none;
+        border-radius: 5px;
+        background-color: #a328d6;
+        font-size: 20px;
+        font-weight: 600;
+        color: #fff;
+        cursor: pointer;
+        width: 100%;
+        padding: 12px;
+  }
+  input {
+    font-size: 20px;
+    width: 100%;
+    border-radius: 5px;
+    outline: none;
+    border: 1px solid #ccc;
+    padding: 15px;
+    margin: 1px;
+    :focus {
+      border: 2px solid #ffb6b6;
+      margin: 0px;
+    }
+    ::placeholder {
+      font-style: normal;
+      font-weight: 400;
+      font-size: 20px;
+      line-height: 23px;
+    }
   }
   input:disabled {
     background: #dadada;
