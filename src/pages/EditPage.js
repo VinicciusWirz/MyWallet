@@ -114,6 +114,13 @@ export default function EditPage(props) {
             `Atualizar ${params.tipo}`
           )}
         </button>
+        <button type="reset" disabled={loading} onClick={() => navigate(-1)}>
+          {loading ? (
+            <ThreeDots height="24" width="70" color="#DBDBDB" />
+          ) : (
+            `Cancelar`
+          )}
+        </button>
       </form>
     </TransactionsContainer>
   );
