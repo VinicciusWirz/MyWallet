@@ -10,7 +10,7 @@ export default function TransactionsPage() {
   const params = useParams();
   const navigate = useNavigate();
   const url = process.env.REACT_APP_API_URL;
-  const { session, setSession } = useContext(SessionContext);
+  const { session } = useContext(SessionContext);
   const [form, setForm] = useState({
     description: "",
     value: "",
@@ -22,11 +22,7 @@ export default function TransactionsPage() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const storedToken = localStorage.getItem("session");
-    if (storedToken) {
-      const tokenObj = JSON.parse(storedToken);
-      setSession(tokenObj);
-    } else {
+    if (!session) {
       navigate("/");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

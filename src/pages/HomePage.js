@@ -10,26 +10,25 @@ import { TailSpin } from "react-loader-spinner";
 export default function HomePage() {
   const url = process.env.REACT_APP_API_URL;
   const navigate = useNavigate();
-  const { session, setSession } = useContext(SessionContext);
+  const { session } = useContext(SessionContext);
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(false);
   const [total, setTotal] = useState({ value: 0, order: "" });
+
   useEffect(() => {
-    const storedToken = localStorage.getItem("session");
-    if (storedToken) {
-      const tokenObj = JSON.parse(storedToken);
-      setSession(tokenObj);
-      updateTransactions(tokenObj);
-    } else {
+    if (!session) {
       navigate("/");
+    } else {
+      updateTransactions();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  function updateTransactions(token) {
+  function updateTransactions() {
+    const token = session.token;
     const config = {
       headers: {
-        Authorization: `Bearer ${session.token ? session.token : token.token}`,
+        Authorization: `Bearer ${token}`,
       },
     };
     setLoading(true);
@@ -58,6 +57,7 @@ export default function HomePage() {
         alert(
           `Erro ao atualizar lista ${err.response.status}: ${err.response.data}`
         );
+        if (err.response.status === 401) logout();
       });
   }
 
@@ -79,7 +79,7 @@ export default function HomePage() {
       axios
         .delete(`${url}/transactions/${id}`, config)
         .then(() => {
-          updateTransactions();
+          updateTransactions(session.token);
         })
         .catch((err) => {
           alert(
@@ -105,7 +105,7 @@ export default function HomePage() {
 
       <HomeContainer>
         <Header>
-          <h1 data-test="user-name">Olá, {session.name}</h1>
+          <h1 data-test="user-name">Olá, {session?.name}</h1>
           <BiExit data-test="logout" onClick={logout} />
         </Header>
 

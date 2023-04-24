@@ -1,13 +1,15 @@
 import axios from "axios";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ThreeDots } from "react-loader-spinner";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import MyWalletLogo from "../components/MyWalletLogo";
+import SessionContext from "../contexts/SessionContext";
 
 export default function SignUpPage() {
   const url = process.env.REACT_APP_API_URL;
   const navigate = useNavigate();
+  const { session } = useContext(SessionContext);
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -16,14 +18,21 @@ export default function SignUpPage() {
   });
   const [loading, setLoading] = useState(false);
 
+  useEffect(() => {
+    if (session) navigate("/home");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   function handleSubmit(e) {
     e.preventDefault();
     if (form.password !== form.repeat_password) {
       return alert("Os campos 'Senha' e 'Confirme a senha' devem ser iguais!");
     }
+    const body = {...form}
+    delete body.repeat_password;
     setLoading(true);
     axios
-      .post(`${url}/sign-up`, form)
+      .post(`${url}/sign-up`, body)
       .then(() => {
         setLoading(false);
         navigate("/");
@@ -130,7 +139,7 @@ const SingUpContainer = styled.section`
   }
   button {
     display: flex;
-    align-items:center;
+    align-items: center;
     justify-content: center;
     outline: none;
     border: none;

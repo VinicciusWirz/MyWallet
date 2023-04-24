@@ -9,7 +9,8 @@ import SignUpPage from "./pages/SignUpPage";
 import TransactionsPage from "./pages/TransactionPage";
 
 export default function App() {
-  const [session, setSession] = useState({ name: "", token: "" });
+  const localData = JSON.parse(localStorage.getItem("session"))
+  const [session, setSession] = useState(localData);
   return (
     <PagesContainer>
       <SessionContext.Provider value={{ session, setSession }}>

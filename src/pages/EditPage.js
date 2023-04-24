@@ -11,7 +11,7 @@ export default function EditPage(props) {
   const id = searchParams.get("id");
   const navigate = useNavigate();
   const url = process.env.REACT_APP_API_URL;
-  const { session, setSession } = useContext(SessionContext);
+  const { session } = useContext(SessionContext);
   const [form, setForm] = useState({
     description: "",
     value: "",
@@ -24,25 +24,22 @@ export default function EditPage(props) {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const storedToken = localStorage.getItem("session");
-    setLoading(true);
-    if (storedToken) {
-      const tokenObj = JSON.parse(storedToken);
-      setSession(tokenObj);
-
-      getTransactionData(tokenObj.token);
-    } else {
+    if (!session) {
       navigate("/");
+    } else {
+      getTransactionData();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  function getTransactionData(token) {
+  function getTransactionData() {
+    const token = session.token;
     const config = {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     };
+    setLoading(true);
     axios
       .get(`${url}/transactions/${id}`, config)
       .then((res) => {
@@ -79,10 +76,10 @@ export default function EditPage(props) {
         setLoading(false);
         navigate("/home");
       })
-    .catch((err) => {
-      setLoading(false);
-      alert(`Erro ${err.response.status}: ${err.response.data}`);
-    });
+      .catch((err) => {
+        setLoading(false);
+        alert(`Erro ${err.response.status}: ${err.response.data}`);
+      });
   }
 
   return (
@@ -156,15 +153,15 @@ const TransactionsContainer = styled.main`
     justify-content: center;
     align-items: center;
     outline: none;
-        border: none;
-        border-radius: 5px;
-        background-color: #a328d6;
-        font-size: 20px;
-        font-weight: 600;
-        color: #fff;
-        cursor: pointer;
-        width: 100%;
-        padding: 12px;
+    border: none;
+    border-radius: 5px;
+    background-color: #a328d6;
+    font-size: 20px;
+    font-weight: 600;
+    color: #fff;
+    cursor: pointer;
+    width: 100%;
+    padding: 12px;
   }
   input {
     font-size: 20px;

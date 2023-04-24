@@ -13,16 +13,11 @@ export default function SignInPage() {
     email: "",
     password: "",
   });
-  const { setSession } = useContext(SessionContext);
+  const { session, setSession } = useContext(SessionContext);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const storedToken = localStorage.getItem("session");
-    if (storedToken) {
-      const token = JSON.parse(storedToken);
-      setSession(token);
-      navigate("/home");
-    }
+    if (session) navigate("/home");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -116,7 +111,7 @@ const SingInContainer = styled.section`
   }
   button {
     display: flex;
-    align-items:center;
+    align-items: center;
     justify-content: center;
     outline: none;
     border: none;
