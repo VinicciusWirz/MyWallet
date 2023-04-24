@@ -13,7 +13,7 @@ export default function HomePage() {
   const { session } = useContext(SessionContext);
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [total, setTotal] = useState({ value: 0, order: "" });
+  const [total, setTotal] = useState({ value: 0, order: "positivo" });
 
   useEffect(() => {
     if (!session) {
