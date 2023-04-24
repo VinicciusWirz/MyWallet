@@ -5,6 +5,7 @@ import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import SessionContext from "../contexts/SessionContext";
 import { ThreeDots } from "react-loader-spinner";
+import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 
 export default function SignInPage() {
   const url = process.env.REACT_APP_API_URL;
@@ -15,6 +16,17 @@ export default function SignInPage() {
   });
   const { session, setSession } = useContext(SessionContext);
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const iconStyles = {
+    cursor: "pointer",
+    position: "absolute",
+    right: "10",
+    top: "50%",
+    transform: "translateY(-50%)",
+    width: "20px",
+    height: "20px",
+    opacity: "0.8"
+  };
 
   useEffect(() => {
     if (session) navigate("/home");
@@ -52,17 +64,30 @@ export default function SignInPage() {
           autoComplete="email"
           data-test="email"
         />
-        <input
-          placeholder="Senha"
-          type="password"
-          autoComplete="current-password"
-          required
-          minLength={3}
-          value={form.password}
-          onChange={(e) => setForm({ ...form, password: e.target.value })}
-          disabled={loading}
-          data-test="password"
-        />
+        <div>
+          <input
+            placeholder="Senha"
+            type={showPassword ? "text" : "password"}
+            autoComplete="current-password"
+            required
+            minLength={3}
+            value={form.password}
+            onChange={(e) => setForm({ ...form, password: e.target.value })}
+            disabled={loading}
+            data-test="password"
+          />
+          {showPassword ? (
+            <AiFillEyeInvisible
+              style={iconStyles}
+              onClick={() => setShowPassword(!showPassword)}
+            />
+          ) : (
+            <AiFillEye
+              style={iconStyles}
+              onClick={() => setShowPassword(!showPassword)}
+            />
+          )}
+        </div>
         <button type="submit" data-test="sign-in-submit" disabled={loading}>
           {loading ? (
             <ThreeDots height="24" width="70" color="#DBDBDB" />
@@ -92,6 +117,10 @@ const SingInContainer = styled.section`
     width: calc(100% - 5px);
     border-radius: 5px;
     gap: 15px;
+    div {
+      width: 100%;
+      position: relative;
+    }
   }
   input {
     font-size: 20px;

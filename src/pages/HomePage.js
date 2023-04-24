@@ -79,7 +79,7 @@ export default function HomePage() {
       axios
         .delete(`${url}/transactions/${id}`, config)
         .then(() => {
-          updateTransactions(session.token);
+          updateTransactions();
         })
         .catch((err) => {
           alert(
