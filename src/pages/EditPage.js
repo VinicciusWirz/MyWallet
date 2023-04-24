@@ -59,16 +59,19 @@ export default function EditPage(props) {
 
   function handleSubmit(e) {
     e.preventDefault();
+    if (isNaN(form.value) || form.value < 0) {
+      return alert("O valor deve ser um número positivo flutuante");
+    }
+
     const body = {
       ...form,
-      value: (Number(parseFloat(form.value).toFixed(2)) * 100).toString(),
+      value: parseFloat(form.value).toFixed(2),
     };
     const config = {
       headers: {
         Authorization: `Bearer ${session.token}`,
       },
     };
-
     setLoading(true);
     axios
       .put(`${url}/transactions/${id}`, body, config)

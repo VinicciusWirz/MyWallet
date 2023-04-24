@@ -30,13 +30,16 @@ export default function TransactionsPage() {
 
   function handleSubmit(e) {
     e.preventDefault();
+    if (isNaN(form.value) || form.value < 0) {
+      return alert("O valor deve ser um número positivo flutuante");
+    }
+
     const date = dayjs().format("DD/MM/YYYY");
     const body = {
       ...form,
-      value: (Number(parseFloat(form.value).toFixed(2)) * 100).toString(),
+      value: parseFloat(form.value).toFixed(2),
       date,
     };
-
     const config = {
       headers: {
         Authorization: `Bearer ${session.token}`,
