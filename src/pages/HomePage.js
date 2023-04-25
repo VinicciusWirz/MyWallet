@@ -223,6 +223,7 @@ const Header = styled.header`
     text-overflow: ellipsis;
     white-space: nowrap;
     max-width: auto;
+    line-height: 31px;
   }
   div {
     height: 100%;
