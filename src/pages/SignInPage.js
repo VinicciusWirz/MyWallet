@@ -25,11 +25,15 @@ export default function SignInPage() {
     transform: "translateY(-50%)",
     width: "20px",
     height: "20px",
-    opacity: "0.8"
+    opacity: "0.8",
   };
 
   useEffect(() => {
-    if (session) navigate("/home");
+    if (session) {
+      navigate("/home");
+    } else {
+      localStorage.clear();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -160,5 +164,11 @@ const SingInContainer = styled.section`
     color: white;
     text-decoration: none;
     padding-top: 30px;
+  }
+  div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
   }
 `;

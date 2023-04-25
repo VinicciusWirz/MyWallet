@@ -14,6 +14,7 @@ export default function HomePage() {
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(false);
   const [total, setTotal] = useState({ value: 0, order: "positivo" });
+  const convertToCurrency = 100;
 
   useEffect(() => {
     if (!session) {
@@ -46,18 +47,20 @@ export default function HomePage() {
             sum += Number(t.value);
           }
         });
-        if (sum < 0) {
-          setTotal({ value: -sum, order: "negativo" });
-        } else {
-          setTotal({ value: sum, order: "positivo" });
-        }
+        const sumIsNegative = sum < 0;
+        const sumResult = {
+          value: sumIsNegative ? -sum : sum,
+          order: sumIsNegative ? "negativo" : "positivo",
+        };
+        setTotal(sumResult);
       })
       .catch((err) => {
+        const noAuthStatus = 401;
         setLoading(false);
         alert(
           `Erro ao atualizar lista ${err.response.status}: ${err.response.data}`
         );
-        if (err.response.status === 401) logout();
+        if (err.response.status === noAuthStatus) logout();
       });
   }
 
@@ -106,7 +109,9 @@ export default function HomePage() {
       <HomeContainer>
         <Header>
           <h1 data-test="user-name">Olá, {session?.name}</h1>
-          <BiExit data-test="logout" onClick={logout} />
+          <div>
+            <BiExit data-test="logout" onClick={logout} />
+          </div>
         </Header>
 
         <TransactionsContainer>
@@ -135,7 +140,7 @@ export default function HomePage() {
                       color={t.type === "withdraw" ? "negativo" : "positivo"}
                       data-test="registry-amount"
                     >
-                      {(t.value / 100).toLocaleString("pt-BR", {
+                      {(t.value / convertToCurrency).toLocaleString("pt-BR", {
                         style: "decimal",
                         minimumFractionDigits: 2,
                         maximumFractionDigits: 2,
@@ -155,11 +160,14 @@ export default function HomePage() {
           <article>
             <strong>Saldo</strong>
             <Value color={total.order} data-test="total-amount">
-              {(Number(total.value) / 100).toLocaleString("pt-BR", {
-                style: "decimal",
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              })}
+              {(Number(total.value) / convertToCurrency).toLocaleString(
+                "pt-BR",
+                {
+                  style: "decimal",
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                }
+              )}
             </Value>
           </article>
         </TransactionsContainer>
@@ -209,6 +217,18 @@ const Header = styled.header`
   font-weight: 400;
   font-family: "Raleway", sans-serif;
   color: white;
+  width: 100%;
+  h1 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: auto;
+  }
+  div {
+    height: 100%;
+    display: flex;
+    align-items: center;
+  }
 `;
 const TransactionsContainer = styled.article`
   flex-grow: 1;
@@ -220,12 +240,14 @@ const TransactionsContainer = styled.article`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  align-items: center;
   ul {
     height: 100%;
     max-height: 100%;
     margin-bottom: 13px;
     overflow-y: scroll;
     padding-bottom: 10px;
+    width: 100%;
     ::-webkit-scrollbar {
       display: none;
     }
@@ -234,8 +256,10 @@ const TransactionsContainer = styled.article`
     }
     display: flex;
     flex-direction: column;
+    align-items: center;
   }
   article {
+    width: 100%;
     display: flex;
     justify-content: space-between;
     strong {
@@ -281,6 +305,7 @@ const Value = styled.div`
   color: ${(props) => (props.color === "positivo" ? "green" : "red")};
 `;
 const ListItemContainer = styled.li`
+  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -307,11 +332,14 @@ const ListItemContainer = styled.li`
   }
 `;
 const ItemDescription = styled.div`
+  width: auto;
   max-width: auto;
   margin-right: 10px;
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
   span {
+    padding-left: 10px;
     color: #c6c6c6;
     margin-right: 10px;
   }
@@ -329,11 +357,13 @@ const LoadingModal = styled.div`
   align-items: center;
 `;
 const NoListMsg = styled.div`
-  align-self: center;
   display: flex;
   align-items: center;
+  justify-content: center;
   height: 100%;
-  width: 55%;
+  width: calc(100% - 50px);
+  align-self: center;
+  justify-self: center;
   p {
     font-family: "Raleway", sans-serif;
     font-style: normal;
