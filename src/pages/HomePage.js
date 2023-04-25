@@ -1,5 +1,5 @@
 import { AiOutlineMinusCircle, AiOutlinePlusCircle } from "react-icons/ai";
-import axios from "axios";
+import apiTransactions from "../services/apiTransactions";
 import { BiExit } from "react-icons/bi";
 import styled from "styled-components";
 import SessionContext from "../contexts/SessionContext";
@@ -8,7 +8,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { TailSpin } from "react-loader-spinner";
 
 export default function HomePage() {
-  const url = process.env.REACT_APP_API_URL;
   const navigate = useNavigate();
   const { session } = useContext(SessionContext);
   const [transactions, setTransactions] = useState([]);
@@ -27,14 +26,10 @@ export default function HomePage() {
 
   function updateTransactions() {
     const token = session.token;
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    };
+
     setLoading(true);
-    axios
-      .get(`${url}/transactions`, config)
+    apiTransactions
+      .getTransactionsReq(token)
       .then((res) => {
         setLoading(false);
         setTransactions(res.data.transactions.reverse());
@@ -71,16 +66,10 @@ export default function HomePage() {
 
   function deleteTransaction(id, desc) {
     const question = `Tem certeza que quer deletar essa transação? Titulo: ${desc}`;
-
     if (window.confirm(question)) {
-      const config = {
-        headers: {
-          Authorization: `Bearer ${session.token}`,
-        },
-      };
       setLoading(true);
-      axios
-        .delete(`${url}/transactions/${id}`, config)
+      apiTransactions
+        .deleteTransactionReq(session.token, id)
         .then(() => {
           updateTransactions();
         })

@@ -1,4 +1,4 @@
-import axios from "axios";
+import apiTransactions from "../services/apiTransactions";
 import dayjs from "dayjs";
 import { ThreeDots } from "react-loader-spinner";
 import { useContext, useEffect, useState } from "react";
@@ -9,7 +9,6 @@ import SessionContext from "../contexts/SessionContext";
 export default function TransactionsPage() {
   const params = useParams();
   const navigate = useNavigate();
-  const url = process.env.REACT_APP_API_URL;
   const { session } = useContext(SessionContext);
   const [form, setForm] = useState({
     description: "",
@@ -40,14 +39,9 @@ export default function TransactionsPage() {
       value: parseFloat(form.value).toFixed(2),
       date,
     };
-    const config = {
-      headers: {
-        Authorization: `Bearer ${session.token}`,
-      },
-    };
     setLoading(true);
-    axios
-      .post(`${url}/transactions`, body, config)
+    apiTransactions
+      .newTransactionReq(session.token, body)
       .then(() => {
         setLoading(false);
         navigate("/home");
@@ -69,6 +63,8 @@ export default function TransactionsPage() {
           value={form.value}
           onChange={(e) => setForm({ ...form, value: e.target.value })}
           disabled={loading}
+          step="0.01"
+          min="0.01"
           data-test="registry-amount-input"
         />
         <input

@@ -1,4 +1,4 @@
-import axios from "axios";
+import apiAuth from "../services/apiAuth";
 import { useContext, useEffect, useState } from "react";
 import { ThreeDots } from "react-loader-spinner";
 import { Link, useNavigate } from "react-router-dom";
@@ -7,7 +7,6 @@ import MyWalletLogo from "../components/MyWalletLogo";
 import SessionContext from "../contexts/SessionContext";
 
 export default function SignUpPage() {
-  const url = process.env.REACT_APP_API_URL;
   const navigate = useNavigate();
   const { session } = useContext(SessionContext);
   const [form, setForm] = useState({
@@ -28,11 +27,12 @@ export default function SignUpPage() {
     if (form.password !== form.repeat_password) {
       return alert("Os campos 'Senha' e 'Confirme a senha' devem ser iguais!");
     }
-    const body = {...form}
+
+    const body = { ...form };
     delete body.repeat_password;
     setLoading(true);
-    axios
-      .post(`${url}/sign-up`, body)
+    apiAuth
+      .signup(body)
       .then(() => {
         setLoading(false);
         navigate("/");

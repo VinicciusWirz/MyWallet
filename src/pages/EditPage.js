@@ -1,4 +1,4 @@
-import axios from "axios";
+import apiTransactions from "../services/apiTransactions";
 import { useContext, useEffect, useState } from "react";
 import { ThreeDots } from "react-loader-spinner";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
@@ -10,7 +10,6 @@ export default function EditPage(props) {
   const [searchParams] = useSearchParams();
   const id = searchParams.get("id");
   const navigate = useNavigate();
-  const url = process.env.REACT_APP_API_URL;
   const { session } = useContext(SessionContext);
   const [form, setForm] = useState({
     description: "",
@@ -34,14 +33,10 @@ export default function EditPage(props) {
 
   function getTransactionData() {
     const token = session.token;
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    };
+
     setLoading(true);
-    axios
-      .get(`${url}/transactions/${id}`, config)
+    apiTransactions
+      .getTransactionsReq(token, id)
       .then((res) => {
         setLoading(false);
         setForm({
@@ -53,7 +48,6 @@ export default function EditPage(props) {
       .catch((err) => {
         setLoading(false);
         alert(`Erro ${err.response.status}: ${err.response.data}`);
-        navigate(-1);
       });
   }
 
@@ -67,14 +61,12 @@ export default function EditPage(props) {
       ...form,
       value: parseFloat(form.value).toFixed(2),
     };
-    const config = {
-      headers: {
-        Authorization: `Bearer ${session.token}`,
-      },
-    };
+
+    const token = session.token;
+
     setLoading(true);
-    axios
-      .put(`${url}/transactions/${id}`, body, config)
+    apiTransactions
+      .editTransactionReq(token, body, id)
       .then(() => {
         setLoading(false);
         navigate("/home");
@@ -96,6 +88,8 @@ export default function EditPage(props) {
           value={form.value}
           onChange={(e) => setForm({ ...form, value: e.target.value })}
           disabled={loading}
+          step="0.01"
+          min="0.01"
           data-test="registry-amount-input"
         />
         <input
