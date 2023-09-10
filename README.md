@@ -8,7 +8,7 @@ In the constantly challenging financial landscape, effectively tracking and mana
   Try it out: https://my-wallet-front-end-sigma.vercel.app/
 </p>
 
-### About
+## About
 This is a web application designed for individuals to efficiently manage their finances. The application includes the following features:
 
 - Singup
@@ -24,7 +24,7 @@ This is a web application designed for individuals to efficiently manage their f
 
 By utilizing this app, users can gain insights into their spending habits, track their financial activities, and maintain a clear overview of their balance.
 
-### Technologies
+## Technologies
 The following tools and frameworks were used in the construction of the project:
 
 <p>
@@ -35,7 +35,7 @@ The following tools and frameworks were used in the construction of the project:
   <img style='margin: 5px;' src='https://img.shields.io/badge/axios-671ddf?&style=for-the-badge&logo=axios&logoColor=white'>
 </p>
 
-### How to use
+## How to use
 1. Clone this repository
 2. Clone back-end repository: [Repository](https://github.com/VinicciusWirz/MyWallet-API)
 3. Follow instructions to run back-end at: [#How to use](https://github.com/VinicciusWirz/MyWallet-API#how-to-use)
