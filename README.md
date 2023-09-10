@@ -14,6 +14,7 @@ This is a web application designed for individuals to efficiently manage their f
 - Singup
 - Signin
 - Signout
+- Session persistence
 - Listing all financial transactions for a user
 - Adding expenses
 - Adding revenue
