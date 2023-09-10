@@ -36,17 +36,19 @@ The following tools and frameworks were used in the construction of the project:
 
 ### How to use
 1. Clone this repository
-2. Install dependencies
+2. Clone back-end repository: [Repository](https://github.com/VinicciusWirz/MyWallet-API)
+3. Follow instructions to run back-end at: [#How to use](https://github.com/VinicciusWirz/MyWallet-API#how-to-use)
+4. Install dependencies
 ```bash
 npm i
 ```
-3. Setup .env file
-4. Run the front-end with
+5. Setup .env file
+6. Run the front-end with
 ```bash
 npm start
 ```
-5. You can optionally build the project running
+7. You can optionally build the project running
 ```bash
 npm run build
 ```
-6. Finally access http://localhost:8000 on your browser (default port can be changed on package.json "start" script)
+8. Finally access http://localhost:8000 on your browser (default port can be changed on package.json "start" script)
